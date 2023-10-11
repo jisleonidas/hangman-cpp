@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -25,13 +27,27 @@ class Word
 
 int main()
 {
+    vector<string> words;
+    ifstream words_file;
+    string line;
+
+    words_file.open("words.txt");
+
+    if (words_file.is_open()) {
+        while (getline(words_file, line)) {
+            words.push_back(line);
+        }
+    }
+    
     cout << "Hello. Let's play a game of hangman." << endl << endl;
 
-    Word word("hangman");
+    for (string w : words) {
+        Word word(w);
+        cout << "original: " << word.original << endl;
+        cout << "obfuscated: " << word.obfuscated << endl;
+        cout << "guessed: " << word.guessed << endl;
+    }
 
-    cout << "original: " << word.original << endl;
-    cout << "obfuscated: " << word.obfuscated << endl;
-    cout << "guessed: " << word.guessed << endl;
 }
 
 bool isVowel(char ch)
