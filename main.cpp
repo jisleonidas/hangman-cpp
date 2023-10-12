@@ -2,6 +2,7 @@
 #include "guess.cpp"
 #include <fstream>
 #include <vector>
+#include <ctime>
 
 int main()
 {
@@ -11,6 +12,8 @@ int main()
     char guess;
     bool has_been_guessed;
 
+    srand((unsigned) time(0));
+
     words_file.open("words.txt");
 
     if (words_file.is_open()) {
@@ -19,12 +22,19 @@ int main()
         }
     }
 
+    int total_words = words.size();
+
     words_file.close();
     
     cout << "Hello. Let's play a game of hangman." << endl << endl;
 
-    for (string w : words) {
-        Word word(w);
+    for (int i = 0; i < total_words; i++) {
+        int word_index;
+
+        word_index = (rand() % words.size());
+        Word word(words[word_index]);
+        words.erase(words.begin() + word_index);
+
         has_been_guessed = false;
         cout << "obfuscated: " << word.obfuscated << endl;
         for (int i = 0; i < 10; i++) {
@@ -50,5 +60,5 @@ int main()
             cout << "\nYOU'VE RUN OUT OF CHANCES. WORD NOT GUESSED. MOVING ON.\n\n";
     }
 
-    cout << "All words guessed. Congratulations!";
+    cout << "ALL WORDS GUESSED. CONGRATULATIONS!\n";
 }
