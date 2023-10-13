@@ -26,7 +26,7 @@ int main()
 
     words_file.close();
     
-    cout << "Hello. Let's play a game of hangman." << endl << endl;
+    cout << "Hello. Let's play a game of hangman." << endl; 
 
     for (int i = 0; i < total_words; i++) {
         int word_index;
@@ -36,17 +36,18 @@ int main()
         words.erase(words.begin() + word_index);
 
         has_been_guessed = false;
-        cout << "obfuscated: " << word.obfuscated << endl;
         for (int i = 0; i < 10; i++) {
             if (word.original == word.obfuscated) {
-                cout << "\nYAY. YOU HAVE GUESSED THE WORD. LET'S GO TO THE NEXT WORD.\n\n";
+                cout << "\nobfuscated: " << word.obfuscated << endl;
+                cout << "YAY. YOU HAVE GUESSED THE WORD. LET'S GO TO THE NEXT WORD.\n";
                 has_been_guessed = true;
                 break;
             }
-            cout << "\nEnter guess: ";
+            cout << "\nobfuscated: " << word.obfuscated << endl;
+            cout << "Enter guess: ";
             getline(cin, line);
             if (line.length() > 1 || line.length() == 0) {
-                cout << "INVALID INPUT.";
+                cout << "INVALID INPUT.\n";
                 i--;
                 continue;
             }
@@ -54,11 +55,10 @@ int main()
                 guess = line[0];
             }
             check_guess(guess, &word);
-            cout << "obfuscated: " << word.obfuscated << endl;
         }
         if (!has_been_guessed)
             cout << "\nYOU'VE RUN OUT OF CHANCES. WORD NOT GUESSED. MOVING ON.\n\n";
     }
 
-    cout << "ALL WORDS GUESSED. CONGRATULATIONS!\n";
+    cout << "\nALL WORDS GUESSED. CONGRATULATIONS!\n";
 }
