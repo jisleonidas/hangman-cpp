@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-string VOWELS = "aeiou";
+string const VOWELS = "aeiou";
 
 class Word
 {
