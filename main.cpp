@@ -1,59 +1,64 @@
-#include <iostream>
-
-using namespace std;
-
-string VOWELS = "aeiou";
-
-class Word
-{
-    int counter = 0;
-
-    public:
-        string original;
-        string obfuscated;
-        string guessed;
-
-        Word(string orig)
-        {
-            original = orig;
-            obfuscate_word();
-            guessed = obfuscated;
-        }
-    
-    void obfuscate_word();
-};
+#include "header.hpp"
+#include "guess.cpp"
+#include <fstream>
+#include <vector>
+#include <ctime>
 
 int main()
 {
-    cout << "Hello. Let's play a game of hangman." << endl << endl;
+    vector<string> words;
+    ifstream words_file;
+    string line;
+    char guess;
+    bool has_been_guessed;
 
-    Word word("hangman");
+    srand((unsigned) time(0));
 
-    cout << "original: " << word.original << endl;
-    cout << "obfuscated: " << word.obfuscated << endl;
-    cout << "guessed: " << word.guessed << endl;
-}
+    words_file.open("words.txt");
 
-bool isVowel(char ch)
-{
-    for (char vowel : VOWELS) {
-        if (ch == vowel)
-            return true;
+    if (words_file.is_open()) {
+        while (getline(words_file, line)) {
+            words.push_back(line);
+        }
     }
 
-    return false;
-}
+    int total_words = words.size();
 
-void Word::obfuscate_word()
-{
-    obfuscated = "";
+    words_file.close();
+    
+    cout << "Hello. Let's play a game of hangman." << endl; 
 
-    for (char ch : original) {
-        if (!(isVowel(ch)))
-            obfuscated += "-";
-        else
-            obfuscated += ch;
+    for (int i = 0; i < total_words; i++) {
+        int word_index;
+
+        word_index = (rand() % words.size());
+        Word word(words[word_index]);
+        words.erase(words.begin() + word_index);
+
+        has_been_guessed = false;
+        for (int i = 0; i < 10; i++) {
+            if (word.original == word.obfuscated) {
+                cout << "\nobfuscated: " << word.obfuscated << endl;
+                cout << "YAY. YOU HAVE GUESSED THE WORD. LET'S GO TO THE NEXT WORD.\n";
+                has_been_guessed = true;
+                break;
+            }
+            cout << "\nobfuscated: " << word.obfuscated << endl;
+            cout << "Enter guess: ";
+            getline(cin, line);
+            if (line.length() > 1 || line.length() == 0) {
+                cout << "INVALID INPUT.\n";
+                i--;
+                continue;
+            }
+            else {
+                guess = line[0];
+            }
+            check_guess(guess, &word);
+        }
+        if (!has_been_guessed)
+            cout << "\nYOU'VE RUN OUT OF CHANCES. WORD NOT GUESSED. MOVING ON.\n\n";
     }
 
-    counter++;
+    cout << "\nALL WORDS GUESSED. CONGRATULATIONS!\n";
 }
